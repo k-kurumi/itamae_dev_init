@@ -8,27 +8,27 @@ execute "apt-get update" do
 end
 
 %W(
-	vim
-	build-essential
-	git
-	exuberant-ctags
-	curl
-	wget
-	w3m
-	zsh
-	tree
-	trash-cli
-	mosh
-	parallel
-	renameutils
-	p7zip-full
-	unzip
-	libmysqlclient-dev
-	libsqlite3-dev
-	sqlite3
+  vim
+  build-essential
+  git
+  exuberant-ctags
+  curl
+  wget
+  w3m
+  zsh
+  tree
+  trash-cli
+  mosh
+  parallel
+  renameutils
+  p7zip-full
+  unzip
+  libmysqlclient-dev
+  libsqlite3-dev
+  sqlite3
   aptitude
 ).each do |pkg|
-	package pkg
+  package pkg
 end
 
 # rg
@@ -144,18 +144,18 @@ execute "install vim" do
   command <<-EOL
     git clone https://github.com/vim/vim.git
     cd vim
-		./configure \
-			--prefix=/usr/local \
-			--with-features=huge \
-			--enable-multibyte \
-			--enable-pythoninterp=yes \
-			--enable-rubyinterp=yes \
-			--enable-luainterp=yes \
-			--enable-cscope \
-			--enable-gpm \
-			--enable-cscope \
-			--enable-fail-if-missing
-		make
+    ./configure \
+      --prefix=/usr/local \
+      --with-features=huge \
+      --enable-multibyte \
+      --enable-pythoninterp=yes \
+      --enable-rubyinterp=yes \
+      --enable-luainterp=yes \
+      --enable-cscope \
+      --enable-gpm \
+      --enable-cscope \
+      --enable-fail-if-missing
+    make
     sudo make install
   EOL
 
