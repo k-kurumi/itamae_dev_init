@@ -10,7 +10,6 @@ end
 %W(
   vim
   build-essential
-  git
   exuberant-ctags
   curl
   wget
@@ -29,6 +28,30 @@ end
   aptitude
 ).each do |pkg|
   package pkg
+end
+
+# git
+%W(
+  tcl
+  gettext
+  libcurl4-openssl-dev
+).each do |pkg|
+  package pkg
+end
+
+execute "install git" do
+  user node.user
+  cwd "/tmp"
+  command <<-EOL
+    wget https://www.kernel.org/pub/software/scm/git/git-2.10.2.tar.gz
+    tar zxvf git-2.10.2.tar.gz
+    cd git-2.10.2
+    ./configure
+    make
+    sudo make install
+  EOL
+
+  not_if "test -e /usr/local/bin/git"
 end
 
 # rg
@@ -55,30 +78,6 @@ execute "install jq" do
   EOL
 
   not_if "test -e /usr/local/bin/jq"
-end
-
-# git
-%W(
-  tcl
-  gettext
-  libcurl4-openssl-dev
-).each do |pkg|
-  package pkg
-end
-
-execute "install git" do
-  user node.user
-  cwd "/tmp"
-  command <<-EOL
-    wget https://www.kernel.org/pub/software/scm/git/git-2.10.2.tar.gz
-    tar zxvf git-2.10.2.tar.gz
-    cd git-2.10.2
-    ./configure
-    make
-    sudo make install
-  EOL
-
-  not_if "test -e /usr/local/bin/git"
 end
 
 # tmux
@@ -198,3 +197,37 @@ execute "install massren" do
 
   not_if "test -e /usr/local/bin/massren"
 end
+
+# fish(oh-my-fishは対話型のインストーラのためレシピ化できない)
+%W(
+  libncurses5-dev
+  libreadline6-dev
+).each do |pkg|
+  package pkg
+end
+execute "install fish" do
+  user node.user
+  cwd "/tmp"
+  command <<-EOL
+    wget https://fishshell.com/files/2.3.1/fish-2.3.1.tar.gz
+    tar zxvf fish-2.3.1.tar.gz
+    cd fish-2.3.1
+    ./configure
+    make
+    sudo make install
+    sudo chsh -s /usr/local/bin/fish #{node.user}
+  EOL
+
+  not_if "test -e /usr/local/bin/fish"
+end
+
+# FIXME: omfはうまくインストールできないので手作業で対応する
+# # oh-my-fish
+# execute "install of-my-fish" do
+#   user node.user
+#   cwd "/tmp"
+#   command <<-EOL
+#     curl -L http://get.oh-my.fish | fish
+#   EOL
+#   not_if "test -e ~/.config/omf"
+# end
