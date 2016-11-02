@@ -199,6 +199,7 @@ execute "install massren" do
 end
 
 # fish(oh-my-fishは対話型のインストーラのためレシピ化できない)
+# omfはdotfilesから手動でインストールする
 %W(
   libncurses5-dev
   libreadline6-dev
@@ -221,13 +222,13 @@ execute "install fish" do
   not_if "test -e /usr/local/bin/fish"
 end
 
-# FIXME: omfはうまくインストールできないので手作業で対応する
-# # oh-my-fish
-# execute "install of-my-fish" do
-#   user node.user
-#   cwd "/tmp"
-#   command <<-EOL
-#     curl -L http://get.oh-my.fish | fish
-#   EOL
-#   not_if "test -e ~/.config/omf"
-# end
+execute "git clone dotfiles" do
+  user node.user
+  cwd "/tmp"
+  command <<-EOL
+    cd ~
+    git clone https://github.com/k-kurumi/dotfiles.git
+  EOL
+
+  not_if "test -e ~/dotfiles"
+end
