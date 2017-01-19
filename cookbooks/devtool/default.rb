@@ -26,6 +26,7 @@ end
   libsqlite3-dev
   sqlite3
   aptitude
+  shellcheck
 ).each do |pkg|
   package pkg
 end
@@ -43,9 +44,9 @@ execute "install git" do
   user node.user
   cwd "/tmp"
   command <<-EOL
-    wget https://www.kernel.org/pub/software/scm/git/git-2.10.2.tar.gz
-    tar zxvf git-2.10.2.tar.gz
-    cd git-2.10.2
+    wget https://www.kernel.org/pub/software/scm/git/git-2.11.0.tar.gz
+    tar zxvf git-2.11.0.tar.gz
+    cd git-2.11.0
     ./configure
     make
     sudo make install
@@ -59,9 +60,9 @@ execute "install ripgrep" do
   user node.user
   cwd "/tmp"
   command <<-EOL
-    wget https://github.com/BurntSushi/ripgrep/releases/download/0.2.5/ripgrep-0.2.5-x86_64-unknown-linux-musl.tar.gz
-    tar zxvf ripgrep-0.2.5-x86_64-unknown-linux-musl.tar.gz
-    sudo mv ripgrep-0.2.5-x86_64-unknown-linux-musl/rg /usr/local/bin
+    wget https://github.com/BurntSushi/ripgrep/releases/download/0.4.0/ripgrep-0.4.0-x86_64-unknown-linux-musl.tar.gz
+    tar zxvf ripgrep-0.4.0-x86_64-unknown-linux-musl.tar.gz
+    sudo mv ripgrep-0.4.0-x86_64-unknown-linux-musl/rg /usr/local/bin
   EOL
 
   not_if "test -e /usr/local/bin/rg"
@@ -115,11 +116,10 @@ execute "install tig" do
   user node.user
   cwd "/tmp"
   command <<-EOL
-    wget https://github.com/jonas/tig/releases/download/tig-2.2/tig-2.2.tar.gz
-    tar zxvf tig-2.2.tar.gz
-    cd tig-2.2
-    make configure
-    LDLIBS=-lncursesw CFLAGS=-I/usr/include/ncursesw ./configure --prefix=/usr/local
+    wget https://github.com/jonas/tig/releases/download/tig-2.2.1/tig-2.2.1.tar.gz
+    tar zxvf tig-2.2.1.tar.gz
+    cd tig-2.2.1
+    LDLIBS=-lncursesw CPPFLAGS=-DHAVE_NCURSESW_CURSES_H ./configure
     make
     sudo make install
   EOL
