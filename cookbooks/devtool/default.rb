@@ -161,6 +161,16 @@ execute "install vim" do
   not_if "test -e /usr/local/bin/vim"
 end
 
+execute "install neobundle" do
+  user node.user
+  command <<-EOL
+    mkdir -p ~/.vim/bundle
+    git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+  EOL
+
+  not_if "test -e ~/.vim/bundle/neobundle.vim"
+end
+
 # cf
 execute "install cf" do
   user node.user
