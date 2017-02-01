@@ -7,7 +7,9 @@ execute "apt-get update" do
   EOL
 end
 
+# bcはfishの補完に必要らしい
 %W(
+  bc
   vim
   build-essential
   exuberant-ctags
