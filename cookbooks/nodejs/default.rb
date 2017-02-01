@@ -1,9 +1,9 @@
-execute "install ndenv" do
+# fish-shellとndenvは相性が悪いためnodebrewを使う
+execute "install nodebrew" do
   user node.user
   command <<-EOL
-    git clone https://github.com/riywo/ndenv.git ~/.ndenv
-    git clone https://github.com/riywo/node-build.git ~/.ndenv/plugins/node-build
+    curl -L git.io/nodebrew | perl - setup
   EOL
 
-  not_if "test -e ~/.ndenv"
+  not_if "test -e ~/.nodebrew"
 end
