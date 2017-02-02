@@ -210,6 +210,18 @@ execute "install massren" do
   not_if "test -e /usr/local/bin/massren"
 end
 
+execute "install peco" do
+  user node.user
+  cwd "/tmp"
+  command <<-EOL
+    wget https://github.com/peco/peco/releases/download/v0.4.7/peco_linux_amd64.tar.gz
+    tar zxvf peco_linux_amd64.tar.gz
+    sudo mv peco_linux_amd64/peco /usr/local/bin
+  EOL
+
+  not_if "test -e /usr/local/bin/peco"
+end
+
 # fish(oh-my-fishは対話型のインストーラのためレシピ化できない)
 # omfはdotfilesから手動でインストールする
 %W(
