@@ -163,14 +163,13 @@ execute "install vim" do
   not_if "test -e /usr/local/bin/vim"
 end
 
-execute "install neobundle" do
+execute "install vim-plug" do
   user node.user
   command <<-EOL
-    mkdir -p ~/.vim/bundle
-    git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   EOL
 
-  not_if "test -e ~/.vim/bundle/neobundle.vim"
+  not_if "test -e ~/.vim/autoload/plug.vim"
 end
 
 # cf
@@ -224,22 +223,13 @@ end
 
 # fish(oh-my-fishは対話型のインストーラのためレシピ化できない)
 # omfはdotfilesから手動でインストールする
-%W(
-  libncurses5-dev
-  libreadline6-dev
-).each do |pkg|
-  package pkg
-end
 execute "install fish" do
   user node.user
-  cwd "/tmp"
   command <<-EOL
-    wget https://fishshell.com/files/2.3.1/fish-2.3.1.tar.gz
-    tar zxvf fish-2.3.1.tar.gz
-    cd fish-2.3.1
-    ./configure
-    make
-    sudo make install
+    sudo apt-add-repository -y ppa:fish-shell/release-2
+    sudo apt-get update
+    sudo apt-get install -y fish
+
     sudo chsh -s /usr/local/bin/fish #{node.user}
   EOL
 
