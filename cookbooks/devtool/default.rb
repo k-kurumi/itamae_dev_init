@@ -95,9 +95,9 @@ execute "install tmux" do
   user node.user
   cwd "/tmp"
   command <<-EOL
-    wget https://github.com/tmux/tmux/releases/download/2.3/tmux-2.3.tar.gz
-    tar zxvf tmux-2.3.tar.gz
-    cd tmux-2.3
+    wget https://github.com/tmux/tmux/releases/download/2.4/tmux-2.4.tar.gz
+    tar zxvf tmux-2.4.tar.gz
+    cd tmux-2.4
     ./configure
     make
     sudo make install
