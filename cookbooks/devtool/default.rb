@@ -57,6 +57,19 @@ execute "install git" do
   not_if "test -e /usr/local/bin/git"
 end
 
+# tigより見やすいツリー表示
+execute "install git-foresta" do
+  user node.user
+  cwd "/tmp"
+  command <<-EOL
+    wget https://github.com/takaaki-kasai/git-foresta/raw/master/git-foresta
+    chmod +x git-foresta
+    sudo mv git-foresta /usr/local/bin
+  EOL
+
+  not_if "test -e /usr/local/bin/git-foresta"
+end
+
 # rg
 execute "install ripgrep" do
   user node.user
