@@ -46,9 +46,9 @@ execute "install git" do
   user node.user
   cwd "/tmp"
   command <<-EOL
-    wget https://www.kernel.org/pub/software/scm/git/git-2.11.0.tar.gz
-    tar zxvf git-2.11.0.tar.gz
-    cd git-2.11.0
+    wget https://www.kernel.org/pub/software/scm/git/git-2.13.0.tar.gz
+    tar zxvf git-2.13.0.tar.gz
+    cd git-2.13.0
     ./configure
     make
     sudo make install
@@ -75,12 +75,27 @@ execute "install ripgrep" do
   user node.user
   cwd "/tmp"
   command <<-EOL
-    wget https://github.com/BurntSushi/ripgrep/releases/download/0.4.0/ripgrep-0.4.0-x86_64-unknown-linux-musl.tar.gz
-    tar zxvf ripgrep-0.4.0-x86_64-unknown-linux-musl.tar.gz
-    sudo mv ripgrep-0.4.0-x86_64-unknown-linux-musl/rg /usr/local/bin
+    wget https://github.com/BurntSushi/ripgrep/releases/download/0.5.2/ripgrep-0.5.2-x86_64-unknown-linux-musl.tar.gz
+    tar zxvf ripgrep-0.5.2-x86_64-unknown-linux-musl.tar.gz
+    chmod +x ripgrep-0.5.2-x86_64-unknown-linux-musl/rg
+    sudo mv ripgrep-0.5.2-x86_64-unknown-linux-musl/rg /usr/local/bin
   EOL
 
   not_if "test -e /usr/local/bin/rg"
+end
+
+# pt
+execute "install the_platinum_searcher" do
+  user node.user
+  cwd "/tmp"
+  command <<-EOL
+    wget https://github.com/monochromegane/the_platinum_searcher/releases/download/v2.1.5/pt_linux_amd64.tar.gz
+    tar zxvf pt_linux_amd64.tar.gz
+    chmod +x pt_linux_amd64/pt
+    sudo mv pt_linux_amd64/pt /usr/local/bin
+  EOL
+
+  not_if "test -e /usr/local/bin/pt"
 end
 
 # jq
@@ -108,9 +123,9 @@ execute "install tmux" do
   user node.user
   cwd "/tmp"
   command <<-EOL
-    wget https://github.com/tmux/tmux/releases/download/2.4/tmux-2.4.tar.gz
-    tar zxvf tmux-2.4.tar.gz
-    cd tmux-2.4
+    wget https://github.com/tmux/tmux/releases/download/2.5/tmux-2.5.tar.gz
+    tar zxvf tmux-2.5.tar.gz
+    cd tmux-2.5
     ./configure
     make
     sudo make install
@@ -130,10 +145,12 @@ end
 execute "install tig" do
   user node.user
   cwd "/tmp"
+
+  # 2バイト文字対応のためconfigureが必要
   command <<-EOL
-    wget https://github.com/jonas/tig/releases/download/tig-2.2.1/tig-2.2.1.tar.gz
-    tar zxvf tig-2.2.1.tar.gz
-    cd tig-2.2.1
+    wget https://github.com/jonas/tig/releases/download/tig-2.2.2/tig-2.2.2.tar.gz
+    tar zxvf tig-2.2.2.tar.gz
+    cd tig-2.2.2
     LDLIBS=-lncursesw CPPFLAGS=-DHAVE_NCURSESW_CURSES_H ./configure
     make
     sudo make install
@@ -202,7 +219,7 @@ execute "install direnv" do
   user node.user
   cwd "/tmp"
   command <<-EOL
-    wget https://github.com/direnv/direnv/releases/download/v2.9.0/direnv.linux-amd64 -O direnv
+    wget https://github.com/direnv/direnv/releases/download/v2.11.3/direnv.linux-amd64 -O direnv
     chmod +x direnv
     sudo mv direnv /usr/local/bin
   EOL
@@ -211,6 +228,8 @@ execute "install direnv" do
 end
 
 # massren(rename tool)
+# 最新版はソースのみ提供されていてgolangがないとコンパイルできない
+# バイナリがあるバージョンをインストールしている
 execute "install massren" do
   user node.user
   cwd "/tmp"
@@ -226,7 +245,7 @@ execute "install peco" do
   user node.user
   cwd "/tmp"
   command <<-EOL
-    wget https://github.com/peco/peco/releases/download/v0.4.7/peco_linux_amd64.tar.gz
+    wget https://github.com/peco/peco/releases/download/v0.5.1/peco_linux_amd64.tar.gz
     tar zxvf peco_linux_amd64.tar.gz
     sudo mv peco_linux_amd64/peco /usr/local/bin
   EOL
