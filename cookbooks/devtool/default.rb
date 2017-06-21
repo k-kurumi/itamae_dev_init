@@ -253,26 +253,36 @@ execute "install peco" do
   not_if "test -e /usr/local/bin/peco"
 end
 
-# fish(oh-my-fishは対話型のインストーラのためレシピ化できない)
-# omfはdotfilesから手動でインストールする
-execute "install fish" do
-  user node.user
-  command <<-EOL
-    sudo apt-add-repository -y ppa:fish-shell/release-2
-    sudo apt-get update
-    sudo apt-get install -y fish
+# # fish(oh-my-fishは対話型のインストーラのためレシピ化できない)
+# # omfはdotfilesから手動でインストールする
+# execute "install fish" do
+#   user node.user
+#   command <<-EOL
+#     sudo apt-add-repository -y ppa:fish-shell/release-2
+#     sudo apt-get update
+#     sudo apt-get install -y fish
 
-    sudo chsh -s /usr/local/bin/fish #{node.user}
+#     sudo chsh -s /usr/local/bin/fish #{node.user}
+#   EOL
+
+#   not_if "test -e /usr/local/bin/fish"
+# end
+
+# zsh関連
+execute "git clone prezto" do
+  user node.user
+  cwd "/home/#{node.user}"
+  command <<-EOL
+    git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
   EOL
 
-  not_if "test -e /usr/local/bin/fish"
+  not_if "test -e ~/.zprezto"
 end
 
 execute "git clone dotfiles" do
   user node.user
-  cwd "/tmp"
+  cwd "/home/#{node.user}"
   command <<-EOL
-    cd ~
     git clone https://github.com/k-kurumi/dotfiles.git
   EOL
 
