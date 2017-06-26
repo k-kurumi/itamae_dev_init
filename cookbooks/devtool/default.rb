@@ -274,6 +274,7 @@ execute "git clone prezto" do
   cwd "/home/#{node.user}"
   command <<-EOL
     git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+    for f in $(ls -a .zprezto/runcoms/z*); do ln -sf ${f} ~/.$(basename $f) ; done
   EOL
 
   not_if "test -e ~/.zprezto"
