@@ -21,5 +21,5 @@ execute "install rbenv and ruby-build" do
     git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
   EOL
 
-  not_if "test -e ~/.rbenv"
+  not_if "test -d ~/.rbenv"
 end

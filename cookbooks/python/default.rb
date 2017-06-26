@@ -20,5 +20,5 @@ execute "install pyenv and pyenv-virtualenv" do
     git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
   EOL
 
-  not_if "test -e ~/.pyenv"
+  not_if "test -d ~/.pyenv"
 end
